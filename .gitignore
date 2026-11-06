@@ -1,0 +1,8 @@
+.venv/
+.env
+__pycache__/
+Certs/
+*.pem
+*.pyc
+.pytest_cache/
+.vscode/
