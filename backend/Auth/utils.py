@@ -5,6 +5,7 @@ from core.config import settings
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any
+from fastapi import HTTPException, status
 
 def hashed_password(password: str) -> bytes:
     salt = bcrypt.gensalt()
@@ -43,14 +44,28 @@ def decode_access_token(token: str | bytes) -> dict:
     try:
         return jwt_decode(token=token)
     except jwt.ExpiredSignatureError:
-        raise Exception("Access token expire")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Access token expired",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
     except jwt.InvalidTokenError:
-        raise Exception("Invalid access token")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid access token",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
 def decode_refresh_token(token: str | bytes) -> dict:
     try:
         return jwt_decode(token=token)
     except jwt.ExpiredSignatureError:
-        raise Exception("Refresh token expire")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Refresh token expired, please relogin",
+        )
     except jwt.InvalidTokenError:
-        raise Exception("Invalid refresh token")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid refresh token",
+        )

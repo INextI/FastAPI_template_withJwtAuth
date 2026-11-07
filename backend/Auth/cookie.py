@@ -2,7 +2,7 @@ from fastapi import Response
 
 class SetTokenCookie():
     def __init__(self,
-                 token: str,
+                 token: str | None,
                  key: str = 'refresh_token',
                  httponly: bool = True,
                  secure: bool = True,

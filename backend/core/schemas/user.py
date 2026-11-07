@@ -6,6 +6,10 @@ class UserBase(BaseModel):
     nickname: str
     email: EmailStr
 
+class UserLogin(BaseModel):
+    password: str
+    email: EmailStr
+
 class UserCreate(UserBase):
     first_name: str = Field(min_length=2, max_length=50)
     second_name: str = Field(min_length=2, max_length=50)
